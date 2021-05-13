@@ -3,46 +3,28 @@ import {
   Button,
   Col,
   Row,
-  Container,
-  FormControl,
-  InputGroup,
-  Form,
+  Container
 } from "react-bootstrap";
 import Task from "../Task/Task"
-import idGenerator from "../../helper/idGenerator.js";
+import NewTask from "../NewTask/NewTask"
+import Confirm from "../Confirm/Confirm"
+
 
 
 class Todo extends Component {
   state = {
-    defaultvalue: "",
     tasks: [],
-    selectedTask: new Set()
+    selectedTask: new Set(),
+    showConfirm: false
   };
 
-  handleChange = (e) => {
-    this.setState({
-      defaultvalue: e.target.value,
-    });
-  };
-  AddTask = (e) => {
-    e.preventDefault();
-
-    const defaultvalue = this.state.defaultvalue.trim();
-
-    if (!defaultvalue) {
-      return;
-    }
-
-    const newTask = {
-      _id: idGenerator(),
-      title: defaultvalue,
-    };
-
+ 
+  addTask = (newTask) => {
+  
     const tasks = [newTask, ...this.state.tasks];
 
     this.setState({
-      tasks: tasks,
-      defaultvalue: "",
+      tasks: tasks
     });
   };
 
@@ -87,14 +69,20 @@ class Todo extends Component {
 
     this.setState({
       tasks: newTasks,
-      selectedTask: new Set()
+      selectedTask: new Set(),
+      showConfirm: false
     })
 
   };
 
+  toogleConfirm =() => {
+    this.setState({
+      showConfirm: !this.state.showConfirm
+    });
+  }
 
   render() {
-    const { tasks, selectedTask } = this.state;
+    const { tasks, selectedTask, showConfirm } = this.state;
 
     const taskComponents = tasks.map((task) => {
       return (
@@ -128,30 +116,17 @@ class Todo extends Component {
         <Container>
           <Row className="justify-content-center">
             <Col xs={12} sm={10} xl={8}>
-              <Form onSubmit={this.AddTask} className="mt-3">
-                <InputGroup className="mb-3">
-                  <FormControl
-                    placeholder="Add task"
-                    disabled={!!selectedTask.size}
-                    value={this.state.defaultvalue}
-                    onChange={this.handleChange}
-                  />
-                  <InputGroup.Append>
-                    <Button type="submit" variant="outline-primary"
-                     disabled={!!selectedTask.size}
-                    >
-                      Add task
-                    </Button>
-                  </InputGroup.Append>
-                </InputGroup>
-              </Form>
+              <NewTask
+              disabled={!!selectedTask.size}
+              onAdd = {this.addTask}
+              />
             </Col>
           </Row>
           <Row className="justify-content-center">
             <Col xs={12} sm={10} xl={8}>
             <Button
             variant="danger"
-            onClick={this.removeSelected}
+            onClick={this.toogleConfirm}
             disabled={!selectedTask.size}
             >
               Delete selected
@@ -160,6 +135,12 @@ class Todo extends Component {
           </Row>
           <Row>{taskComponents}</Row>
         </Container>
+        {showConfirm && 
+        <Confirm 
+        onClose = {this.toogleConfirm}
+        onConfirm = {this.removeSelected}
+        count = {selectedTask.size}
+        />}
       </div>
     );
   }

@@ -1,8 +1,18 @@
 import React, { Component } from "react";
 import { Button, Card, Form } from "react-bootstrap";
+import PropTypes from 'prop-types';
 import styles from "./taskStyle.module.css"
 
 class Task extends Component {
+  
+  // static propTypes = {
+  //   data: PropTypes.object.isRequired,
+  //   onToggle: PropTypes.func.isRequired,
+  //   disabled: PropTypes.bool.isRequired,
+  //   onDelete: PropTypes.func.isRequired,
+  
+  // };
+
     state={
         selected: false
     }
@@ -37,8 +47,15 @@ class Task extends Component {
           </Button>
         </Card.Body>
       </Card>
-    );
+    )
   }
 }
+
+Task.propTypes = {
+  data: PropTypes.object.isRequired,
+  onToggle: PropTypes.func.isRequired,
+  disabled: PropTypes.bool.isRequired,
+  onDelete: PropTypes.func.isRequired,
+};
 
 export default Task;
