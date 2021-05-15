@@ -1,53 +1,52 @@
 import React, { Component } from "react";
 import { Button, Card, Form } from "react-bootstrap";
-import PropTypes from 'prop-types';
-import styles from "./taskStyle.module.css"
+import PropTypes from "prop-types";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrash, faEdit } from "@fortawesome/free-solid-svg-icons";
+
+import styles from "./taskStyle.module.css";
 
 class Task extends Component {
-  
   // static propTypes = {
   //   data: PropTypes.object.isRequired,
   //   onToggle: PropTypes.func.isRequired,
   //   disabled: PropTypes.bool.isRequired,
   //   onDelete: PropTypes.func.isRequired,
-  
+
   // };
 
-    state={
-        selected: false
-    }
-
-    handleChange = () => {
-        const {data, onToggle} = this.props;
-        onToggle(data._id);
-        this.setState({
-            selected: !this.state.selected
-        })
-    }
+  handleChange = () => {
+    const { data, onToggle } = this.props;
+    onToggle(data._id);
+  };
 
   render() {
     const task = this.props.data;
-    const { disabled, onDelete } = this.props; 
-    const {selected} = this.state;
+    const { disabled, onDelete, selected } = this.props;
+
     return (
       <Card className={`mt-3 ${selected ? styles.selected : ""}`}>
         <Card.Body>
-          <Form.Check onChange={this.handleChange} />
+          <Form.Check onChange={this.handleChange} checked={selected} />
           <Card.Title>{task.title}</Card.Title>
-          <Card.Text>
-            Some quick example text to build on the card title and make up the
-            bulk of the card's content.
-          </Card.Text>
+          <Card.Text>{task.description}</Card.Text>
           <Button
+            variant="primary"
+            disabled={disabled}
+            onClick={() => onDelete(task._id)}
+          >
+            <FontAwesomeIcon icon={faEdit} />
+          </Button>
+          <Button className="m-2"
             variant="danger"
             disabled={disabled}
             onClick={() => onDelete(task._id)}
           >
-            Delete
+            <FontAwesomeIcon icon={faTrash} />
           </Button>
         </Card.Body>
       </Card>
-    )
+    );
   }
 }
 
@@ -56,6 +55,7 @@ Task.propTypes = {
   onToggle: PropTypes.func.isRequired,
   disabled: PropTypes.bool.isRequired,
   onDelete: PropTypes.func.isRequired,
+  selected: PropTypes.bool.isRequired,
 };
 
 export default Task;
