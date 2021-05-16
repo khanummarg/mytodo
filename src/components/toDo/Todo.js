@@ -3,13 +3,15 @@ import { Button, Col, Row, Container } from "react-bootstrap";
 import Task from "../Task/Task";
 import NewTask from "../NewTask/NewTask";
 import Confirm from "../Confirm/Confirm";
+import EditTaskModal from "../EditTaskModal/EditTaskModal";
 
 class Todo extends Component {
   state = {
     tasks: [],
     selectedTask: new Set(),
     showConfirm: false,
-    openNewTaskModal: false
+    openNewTaskModal: false,
+    editTask: null,
   };
 
   addTask = (newTask) => {
@@ -17,15 +19,9 @@ class Todo extends Component {
 
     this.setState({
       tasks: tasks,
-      openNewTaskModal: false
+      openNewTaskModal: false,
     });
   };
-
-  // handleDelete = () => {
-  //   this.setState({
-  //     tasks: [],
-  //   });
-  // };
 
   deleteTask = (taskId) => {
     const newTasks = this.state.tasks.filter((task) => taskId !== task._id);
@@ -45,7 +41,6 @@ class Todo extends Component {
 
     this.setState({
       selectedTask: selectedTask,
-      // or selectedTask
     });
   };
 
@@ -88,14 +83,31 @@ class Todo extends Component {
 
   toggleNewTaskModal = () => {
     this.setState({
-      openNewTaskModal: !this.state.openNewTaskModal
+      openNewTaskModal: !this.state.openNewTaskModal,
     });
   };
 
+  handleEdit = (editTask) => {
+    this.setState({
+      editTask: editTask,
+    });
+  };
 
+  handleSaveTask = (editedTask) => {
+    const tasks = [...this.state.tasks];
+    const foundIndex = tasks.findIndex((task) => task._id === editedTask._id);
+
+    tasks[foundIndex] = editedTask;
+
+    this.setState({
+      tasks,
+      editTask: null,
+    });
+  };
 
   render() {
-    const { tasks, selectedTask, showConfirm, openNewTaskModal } = this.state;
+    const { tasks, selectedTask, showConfirm, openNewTaskModal, editTask } =
+      this.state;
 
     const taskComponents = tasks.map((task) => {
       return (
@@ -106,28 +118,14 @@ class Todo extends Component {
             onToggle={this.toogleTask}
             onDelete={this.deleteTask}
             selected={selectedTask.has(task._id)}
+            onEdit={this.handleEdit}
           />
         </Col>
       );
     });
 
-    // const li = tasks.map((task, index) => {
-    //   return <li key={index} className={index===2 ? styles.selected : null}>{task}</li>;
-    // });
     return (
       <div>
-        {/* <form onSubmit={this.AddTask}>
-          <input
-            type="text"
-            value={this.state.defaultvalue}
-            onChange={this.handleChange}
-          />
-          <button type="submit">Add text</button>
-          <button type="button" onClick={this.handleDelete}>
-            Delete All
-          </button>
-        </form> */}
-
         <Container>
           <Row className="justify-content-center">
             <Col xs={12} sm={10} xl={8}>
@@ -163,14 +161,16 @@ class Todo extends Component {
             count={selectedTask.size}
           />
         )}
-        {
-          openNewTaskModal && <NewTask
-          onClose = {this.toggleNewTaskModal}
-          onAdd = {this.addTask}
+        {openNewTaskModal && (
+          <NewTask onClose={this.toggleNewTaskModal} onAdd={this.addTask} />
+        )}
+        {editTask && (
+          <EditTaskModal
+            data={editTask}
+            onClose={() => this.handleEdit(null)}
+            onSave={this.handleSaveTask}
           />
-        }
-          
-          
+        )}
       </div>
     );
   }
