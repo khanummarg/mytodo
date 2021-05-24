@@ -71,7 +71,7 @@ class EditTaskModal extends Component {
             <Button variant="success" onClick={this.handleSubmit}>
               Save
             </Button>
-            <Button onClick={onClose}>Cancele</Button>
+            <Button onClick={onClose}>Cancel</Button>
           </Modal.Footer>
         </Modal>
       </>

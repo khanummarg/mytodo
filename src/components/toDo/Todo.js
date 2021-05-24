@@ -14,21 +14,93 @@ class Todo extends Component {
     editTask: null,
   };
 
-  addTask = (newTask) => {
-    const tasks = [newTask, ...this.state.tasks];
+  componentDidMount() {
+    fetch("http://localhost:3001/task", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then(async (response) => {
+        const res = await response.json();
+        console.log("res", res);
 
-    this.setState({
-      tasks: tasks,
-      openNewTaskModal: false,
-    });
+        if (response.status >= 400 && response.status < 600) {
+          if (res.error) {
+            throw res.error;
+          } else {
+            throw new Error("Something went wrong!");
+          }
+        }
+
+        this.setState({
+          tasks: res,
+        });
+      })
+      .catch((error) => {
+        console.log("error", error);
+      });
+  }
+
+  addTask = (newTask) => {
+    fetch("http://localhost:3001/task", {
+      method: "POST",
+      body: JSON.stringify(newTask),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then(async (response) => {
+        const res = await response.json();
+
+        if (response.status >= 400 && response.status < 600) {
+          if (res.error) {
+            throw res.error;
+          } else {
+            throw new Error("Something went wrong!");
+          }
+        }
+
+        const tasks = [res, ...this.state.tasks];
+
+        this.setState({
+          tasks: tasks,
+          openNewTaskModal: false,
+        });
+      })
+      .catch((error) => {
+        console.log("error", error);
+      });
   };
 
   deleteTask = (taskId) => {
-    const newTasks = this.state.tasks.filter((task) => taskId !== task._id);
+    fetch(`http://localhost:3001/task/${taskId}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then(async (response) => {
+        const res = await response.json();
+        console.log("res", res);
 
-    this.setState({
-      tasks: newTasks,
-    });
+        if (response.status >= 400 && response.status < 600) {
+          if (res.error) {
+            throw res.error;
+          } else {
+            throw new Error("Something went wrong!");
+          }
+        }
+
+        const newTasks = this.state.tasks.filter((task) => taskId !== task._id);
+
+        this.setState({
+          tasks: newTasks,
+        });
+      })
+      .catch((error) => {
+        console.log("error", error);
+      });
   };
 
   toogleTask = (taskId) => {

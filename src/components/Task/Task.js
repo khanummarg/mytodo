@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import { Button, Card, Form } from "react-bootstrap";
 import PropTypes from "prop-types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -6,14 +6,7 @@ import { faTrash, faEdit } from "@fortawesome/free-solid-svg-icons";
 
 import styles from "./taskStyle.module.css";
 
-class Task extends Component {
-  // static propTypes = {
-  //   data: PropTypes.object.isRequired,
-  //   onToggle: PropTypes.func.isRequired,
-  //   disabled: PropTypes.bool.isRequired,
-  //   onDelete: PropTypes.func.isRequired,
-
-  // };
+class Task extends PureComponent {
 
   handleChange = () => {
     const { data, onToggle } = this.props;

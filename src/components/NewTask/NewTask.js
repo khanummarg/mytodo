@@ -10,11 +10,7 @@ class NewTask extends Component {
   };
 
   handleChange = (e) => {
-    // const {name, value} = e.target;
-    // this.setState({
-    //   [name]: value
-    // });
-
+    
     this.setState({
       [e.target.name]: e.target.value,
     });
