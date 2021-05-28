@@ -119,18 +119,45 @@ class Todo extends Component {
   removeSelected = () => {
     const { selectedTask, tasks } = this.state;
 
-    const newTasks = tasks.filter((task) => {
-      if (selectedTask.has(task._id)) {
-        return false;
-      }
-      return true;
-    });
+    const body = {
+      tasks: [...selectedTask],
+    };
 
-    this.setState({
-      tasks: newTasks,
-      selectedTask: new Set(),
-      showConfirm: false,
-    });
+    fetch(`http://localhost:3001/task`, {
+      method: "PATCH",
+      body: JSON.stringify(body),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then(async (response) => {
+        const res = await response.json();
+        console.log("res", res);
+
+        if (response.status >= 400 && response.status < 600) {
+          if (res.error) {
+            throw res.error;
+          } else {
+            throw new Error("Something went wrong!");
+          }
+        }
+
+        const newTasks = tasks.filter((task) => {
+          if (selectedTask.has(task._id)) {
+            return false;
+          }
+          return true;
+        });
+
+        this.setState({
+          tasks: newTasks,
+          selectedTask: new Set(),
+          showConfirm: false,
+        });
+      })
+      .catch((error) => {
+        console.log("error", error);
+      });
   };
 
   toogleConfirm = () => {
@@ -166,15 +193,40 @@ class Todo extends Component {
   };
 
   handleSaveTask = (editedTask) => {
-    const tasks = [...this.state.tasks];
-    const foundIndex = tasks.findIndex((task) => task._id === editedTask._id);
+    fetch(`http://localhost:3001/task/${editedTask._id}`, {
+      method: "PUT",
+      body: JSON.stringify(editedTask),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then(async (response) => {
+        const res = await response.json();
+        console.log("res", res);
 
-    tasks[foundIndex] = editedTask;
+        if (response.status >= 400 && response.status < 600) {
+          if (res.error) {
+            throw res.error;
+          } else {
+            throw new Error("Something went wrong!");
+          }
+        }
 
-    this.setState({
-      tasks,
-      editTask: null,
-    });
+        const tasks = [...this.state.tasks];
+        const foundIndex = tasks.findIndex(
+          (task) => task._id === editedTask._id
+        );
+
+        tasks[foundIndex] = editedTask;
+
+        this.setState({
+          tasks,
+          editTask: null,
+        });
+      })
+      .catch((error) => {
+        console.log("error", error);
+      });
   };
 
   render() {

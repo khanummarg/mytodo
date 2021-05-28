@@ -3,7 +3,7 @@ import { Button, Card, Form } from "react-bootstrap";
 import PropTypes from "prop-types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash, faEdit } from "@fortawesome/free-solid-svg-icons";
-
+import {formatDate} from '../../helper/utils'
 import styles from "./taskStyle.module.css";
 
 class Task extends PureComponent {
@@ -22,7 +22,13 @@ class Task extends PureComponent {
         <Card.Body>
           <Form.Check onChange={this.handleChange} checked={selected} />
           <Card.Title>{task.title}</Card.Title>
-          <Card.Text>{task.description}</Card.Text>
+          <Card.Text>
+            Description: {task.description}
+            </Card.Text>
+            <Card.Text>
+              {/* Date: {task.date ? task.date.slice(0,10): ""} */}
+              Date: {formatDate(task.date)}
+            </Card.Text>
           <Button
             variant="primary"
             disabled={disabled}
