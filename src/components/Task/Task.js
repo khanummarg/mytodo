@@ -3,7 +3,8 @@ import { Button, Card, Form } from "react-bootstrap";
 import PropTypes from "prop-types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash, faEdit } from "@fortawesome/free-solid-svg-icons";
-import {formatDate} from '../../helper/utils'
+import {formatDate} from "../../helper/utils";
+import {Link} from "react-router-dom";
 import styles from "./taskStyle.module.css";
 
 class Task extends PureComponent {
@@ -21,7 +22,9 @@ class Task extends PureComponent {
       <Card className={`mt-3 ${selected ? styles.selected : ""}`}>
         <Card.Body>
           <Form.Check onChange={this.handleChange} checked={selected} />
+          <Link to={`/task/${task._id}`}>
           <Card.Title>{task.title}</Card.Title>
+          </Link>
           <Card.Text>
             Description: {task.description}
             </Card.Text>

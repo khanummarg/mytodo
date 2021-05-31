@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import { Button, Col, Row, Container } from "react-bootstrap";
-import Task from "../Task/Task";
-import NewTask from "../NewTask/NewTask";
-import Confirm from "../Confirm/Confirm";
-import EditTaskModal from "../EditTaskModal/EditTaskModal";
+import Task from "../../Task/Task";
+import NewTask from "../../NewTask/NewTask";
+import Confirm from "../../Confirm/Confirm";
+import EditTaskModal from "../../EditTaskModal/EditTaskModal";
 
 class Todo extends Component {
   state = {

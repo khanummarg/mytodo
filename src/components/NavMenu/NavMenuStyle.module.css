@@ -1,0 +1,13 @@
+.menu {
+    color: white;
+    font-size: 22px;
+    padding-left: 10px;
+    text-decoration: none;
+}
+.menu:hover {
+    color: red;
+}
+.active {
+    color: red;
+    font-weight: 800;
+}
