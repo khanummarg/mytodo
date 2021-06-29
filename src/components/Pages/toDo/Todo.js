@@ -221,7 +221,7 @@ class Todo extends Component {
 
         this.setState({
           tasks,
-          editTask: null,
+          editTask: null
         });
       })
       .catch((error) => {
