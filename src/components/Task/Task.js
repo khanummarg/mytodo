@@ -3,7 +3,7 @@ import { Button, Card, Form } from "react-bootstrap";
 import PropTypes from "prop-types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash, faEdit } from "@fortawesome/free-solid-svg-icons";
-import {formatDate} from "../../helper/utils";
+import {formatDate, textTruncate } from "../../helper/utils";
 import {Link} from "react-router-dom";
 import styles from "./taskStyle.module.css";
 
@@ -23,10 +23,10 @@ class Task extends PureComponent {
         <Card.Body>
           <Form.Check onChange={this.handleChange} checked={selected} />
           <Link to={`/task/${task._id}`}>
-          <Card.Title>{task.title}</Card.Title>
+          <Card.Title>{textTruncate(task.title, 20 )}</Card.Title>
           </Link>
           <Card.Text>
-            Description: {task.description}
+            Description: {textTruncate(task.description, 60 )}
             </Card.Text>
             <Card.Text>
               {/* Date: {task.date ? task.date.slice(0,10): ""} */}
