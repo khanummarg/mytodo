@@ -1,33 +1,91 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 
 export default function Hooks() {
-  const [name, setName] = useState("");
-  const [surname, setSurname] = useState("");
+ 
+  const [values, setValues] = useState({
+    name: '',
+    surname: '',
+    info: {
+      address: 'Yerevan',
+      age: 15
+    }
+  });
+
+  const elemRef = useRef();
+
+  console.log('elemRef', elemRef)
+  //componentDidMount, conponentDidUpdate
+
+  // useEffect(() =>{
+  //   console.log('useEffect');
+  // })
+
+
+
+
+   //componentDidMount, conponentDidUpdate
+
+  //  useEffect(() =>{
+  //   console.log('useEffect');
+  // }, [values]);
+
+
+ //componentDidMount
+
+//  useEffect(() =>{
+//   console.log('useEffect');
+// }, []);
+
+
+
+
+//componentDidMount
+
+useEffect(() =>{
+  console.log('useEffect');
+
+  return ()=> {
+    console.log('componentWillUnmount')
+  }
+}, []);
 
   return (
     <div>
       <input
+        ref = {elemRef}
         type="text"
-        value={name}
+        value={values.name}
         onChange={(event) => {
-          setName(event.target.value);
+          setValues({
+            ...values,
+            name: event.target.value
+          });
         }}
       />
       <input
         type="text"
-        value={surname}
+        value={values.surname}
         onChange={(event) => {
-          setSurname(event.target.value);
+          setValues({
+            ...values,
+            surname:event.target.value
+          });
         }}
       />
-      <button
-        onClick={() => {
-          console.log("name", name);
-          console.log("surname", surname);
+      <input
+        type="text"
+       
+        onChange={(event) => {
+          setValues({
+            ...values,
+            info: {
+            ...values.info,
+            address:event.target.value
+            }
+          });
         }}
-      >
-        Click
-      </button>
+      />
+     
     </div>
   );
 }
