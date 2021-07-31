@@ -7,22 +7,13 @@ import NavMenu from "./components/NavMenu/NavMenu";
 import SingleTask from "./components/Pages/SingleTask/SingleTask";
 import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
 
-import ClickCounter from "./demo/HOC/codevolution/ClickCounter";
-import HoverCounter from "./demo/HOC/codevolution/HoverCounter";
-import RefDemo from "./demo/RefDemo";
-import Hooks from "./demo/Hooks";
-
-
 
 
 
 function App() {
   return (
     <div>
-      <Hooks />
-      <RefDemo />
-      <ClickCounter name="Ann" />
-      <HoverCounter />
+      
     <BrowserRouter>
       <NavMenu />
         <Switch>
