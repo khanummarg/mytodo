@@ -10,9 +10,12 @@ import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
 
 
 
+
+
 function App() {
   return (
     <div>
+      
       
     <BrowserRouter>
       <NavMenu />
