@@ -1,42 +1,13 @@
-import React, {useState} from "react";
-import { connect } from "react-redux";
+import Increment from "./Increment";
+import Decrement from "./Decrement";
 
-function Changecounter(props) {
-
-  const [value, setValue] = useState('');
-
-
+function ChangeCount() {
   return (
     <div>
-      <input
-      type="text"
-      value={value}
-      onChange={(e)=>{
-        setValue(e.target.value)
-      }}
-      />
-      <button 
-      onClick={()=>{
-        props.onSendValue(value);
-        setValue('')
-      }}
-      >
-        Send value
-      </button>
-      <button onClick={props.onChange}>Change count</button>
+      <Increment />
+      <Decrement />
     </div>
   );
 }
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    onChange: () => {
-      dispatch({type: 'CHANGE_COUNT'});
-    },
-    onSendValue: (val)=>{
-      dispatch({type: 'SEND_MESSAGE', message: val})
-    }
-  };
-};
-
-export default connect(null, mapDispatchToProps)(Changecounter);
+export default ChangeCount;

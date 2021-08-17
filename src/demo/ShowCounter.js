@@ -1,26 +1,13 @@
-import React from 'react';
-import { connect } from 'react-redux'
+import { connect } from "react-redux";
 
 function ShowCounter(props) {
-    
-    return (
-         <h2>
-             Count: {props.value}
-             Massage: {props.message}
-         </h2>
-    )
+  return <h2>Count: {props.count}</h2>;
 }
 
-const mapStateToProps = (state) =>{
-return {
-    value: state.count,
-    message: state.message
+const mapStateToProps = (state) => {
+  return {
+    count: state.count
+  };
 };
-};
-
-// const mapDispatchToProps = ()=>{
-    
-// }
-
 
 export default connect(mapStateToProps)(ShowCounter);
