@@ -4,10 +4,12 @@ import Task from "../../Task/Task";
 import NewTask from "../../NewTask/NewTask";
 import Confirm from "../../Confirm/Confirm";
 import EditTaskModal from "../../EditTaskModal/EditTaskModal";
+import {connect} from "react-redux";
+import request from "../../../helper/request"
 
 class Todo extends Component {
   state = {
-    tasks: [],
+    // tasks: [],
     selectedTask: new Set(),
     showConfirm: false,
     openNewTaskModal: false,
@@ -15,31 +17,8 @@ class Todo extends Component {
   };
 
   componentDidMount() {
-    fetch("http://localhost:3001/task", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then(async (response) => {
-        const res = await response.json();
-        console.log("res", res);
+    this.props.getTasks();
 
-        if (response.status >= 400 && response.status < 600) {
-          if (res.error) {
-            throw res.error;
-          } else {
-            throw new Error("Something went wrong!");
-          }
-        }
-
-        this.setState({
-          tasks: res,
-        });
-      })
-      .catch((error) => {
-        console.log("error", error);
-      });
   }
 
   addTask = (newTask) => {
@@ -230,8 +209,11 @@ class Todo extends Component {
   };
 
   render() {
-    const { tasks, selectedTask, showConfirm, openNewTaskModal, editTask } =
+    const { selectedTask, showConfirm, openNewTaskModal, editTask } =
       this.state;
+      const {tasks} = this.props;
+
+
 
     const taskComponents = tasks.map((task) => {
       return (
@@ -300,4 +282,21 @@ class Todo extends Component {
   }
 }
 
-export default Todo;
+const mapStateToProps = (state)=> {
+  return {
+    tasks: state.tasks
+  };
+};
+
+const mapDispatchToProps=(dispatch) => {
+  return {
+    getTasks: () => {
+      request('http://localhost:3001/task')
+      .then((tasks)=> {
+        dispatch({type: 'GET_TASKS', tasks: tasks});
+      })
+    }
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Todo);
