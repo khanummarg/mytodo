@@ -288,15 +288,27 @@ const mapStateToProps = (state)=> {
   };
 };
 
-const mapDispatchToProps=(dispatch) => {
-  return {
+// const mapDispatchToProps=(dispatch) => {
+//   return {
+//     getTasks: () => {
+//       request('http://localhost:3001/task')
+//       .then((tasks)=> {
+//         dispatch({type: 'GET_TASKS', tasks: tasks});
+//       })
+//     }
+//   };
+// };
+
+
+const mapDispatchToProps= {
     getTasks: () => {
+      return (dispatch) =>{
       request('http://localhost:3001/task')
       .then((tasks)=> {
         dispatch({type: 'GET_TASKS', tasks: tasks});
       })
     }
+  }
   };
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(Todo);
