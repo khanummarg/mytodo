@@ -4,8 +4,8 @@ import Task from "../../Task/Task";
 import NewTask from "../../NewTask/NewTask";
 import Confirm from "../../Confirm/Confirm";
 import EditTaskModal from "../../EditTaskModal/EditTaskModal";
-import {connect} from "react-redux";
-import request from "../../../helper/request"
+import { connect } from "react-redux";
+import { getTasks } from "../../../store/actions";
 
 class Todo extends Component {
   state = {
@@ -18,39 +18,15 @@ class Todo extends Component {
 
   componentDidMount() {
     this.props.getTasks();
-
   }
 
-  addTask = (newTask) => {
-    fetch("http://localhost:3001/task", {
-      method: "POST",
-      body: JSON.stringify(newTask),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then(async (response) => {
-        const res = await response.json();
-
-        if (response.status >= 400 && response.status < 600) {
-          if (res.error) {
-            throw res.error;
-          } else {
-            throw new Error("Something went wrong!");
-          }
-        }
-
-        const tasks = [res, ...this.state.tasks];
-
-        this.setState({
-          tasks: tasks,
-          openNewTaskModal: false,
-        });
-      })
-      .catch((error) => {
-        console.log("error", error);
+  componentDidUpdate(prevProps) {
+    if (!prevProps.addTaskSuccess && this.props.addTaskSuccess) {
+      this.setState({
+        openNewTaskModal: false,
       });
-  };
+    }
+  }
 
   deleteTask = (taskId) => {
     fetch(`http://localhost:3001/task/${taskId}`, {
@@ -200,7 +176,7 @@ class Todo extends Component {
 
         this.setState({
           tasks,
-          editTask: null
+          editTask: null,
         });
       })
       .catch((error) => {
@@ -211,9 +187,7 @@ class Todo extends Component {
   render() {
     const { selectedTask, showConfirm, openNewTaskModal, editTask } =
       this.state;
-      const {tasks} = this.props;
-
-
+    const { tasks } = this.props;
 
     const taskComponents = tasks.map((task) => {
       return (
@@ -268,7 +242,10 @@ class Todo extends Component {
           />
         )}
         {openNewTaskModal && (
-          <NewTask onClose={this.toggleNewTaskModal} onAdd={this.addTask} />
+          <NewTask
+            onClose={this.toggleNewTaskModal}
+            //onAdd={this.props.addTask}
+          />
         )}
         {editTask && (
           <EditTaskModal
@@ -282,9 +259,10 @@ class Todo extends Component {
   }
 }
 
-const mapStateToProps = (state)=> {
+const mapStateToProps = (state) => {
   return {
-    tasks: state.tasks
+    tasks: state.tasks,
+    addTaskSuccess: state.addTaskSuccess,
   };
 };
 
@@ -299,16 +277,8 @@ const mapStateToProps = (state)=> {
 //   };
 // };
 
-
-const mapDispatchToProps= {
-    getTasks: () => {
-      return (dispatch) =>{
-      request('http://localhost:3001/task')
-      .then((tasks)=> {
-        dispatch({type: 'GET_TASKS', tasks: tasks});
-      })
-    }
-  }
-  };
+const mapDispatchToProps = {
+  getTasks,
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(Todo);
